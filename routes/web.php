@@ -25,6 +25,8 @@ Route::group(['middleware'=>'auth'], function (){
     Route::resource('group', 'GroupController');
     Route::resource('node', 'NodeController');
     Route::resource('infrared', 'InfraredController');
+    Route::get('infrared/enviarCodigo/{button_id}', 'InfraredController@enviarCodigo');
     Route::resource('device', 'DeviceController');
+    Route::get('device/getCodes/{device_id}', 'DeviceController@getCodes');
     Route::get('device/lerCodigo/{port_id}', 'DeviceController@lerCodigo');
 });

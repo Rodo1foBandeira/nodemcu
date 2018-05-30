@@ -127,10 +127,16 @@ class DeviceController extends Controller
 
     public function lerCodigo($port_id)
     {
-        $port = Port::find($port_id)->with('node');
+        $port = Port::with('node')->find($port_id);
         $client = new \GuzzleHttp\Client();
-        $retorno = $client->request('GET', $port->node->ip.'/?getInfrared=')->getBody();
-        $client->close();
+        $retorno = $client->request('GET', $port->node->ip.'/?getInfrared=0')->getBody();
+        //$client->close();
         return $retorno;
+    }
+
+    public function getCodes($device_id)
+    {
+        $codes = Code::where('device_id',$device_id)->select('id','name')->get();
+        return response()->json($codes);
     }
 }

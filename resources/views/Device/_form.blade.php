@@ -64,7 +64,7 @@
 
     function lerCodigo () {
         var port_id = $('#ports').val();
-        $.get(window.location.href+'/lerCodigo/'+port_id, function (data) {
+        $.get('http://'+window.location.host+'/device/lerCodigo/'+port_id, function (data) {
             $('#retornoIR').text(data);
         });
     }

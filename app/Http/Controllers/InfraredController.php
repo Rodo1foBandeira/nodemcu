@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Button;
+use App\Code;
 use App\Device;
 use App\Infrared;
 use App\Port;
@@ -44,7 +45,8 @@ class InfraredController extends Controller
         $buttons = $request->input('buttons');
         foreach ($buttons as $key => &$button)
         {
-            $button['port_id'] = $infrared->id;
+            $button['infrared_id'] = $infrared->id;
+            unset($button['device_id']);
         }
         Button::insert($buttons);
         return redirect($this::ROUTE);
@@ -57,7 +59,7 @@ class InfraredController extends Controller
      */
     public function show($id)
     {
-        $infrared = Infrared::with('buttons')->find($id);
+        $infrared = Infrared::with('buttons', 'buttons.code')->find($id);
         return view($this::ROUTE.'.show',compact('infrared'));
     }
     /**
@@ -68,6 +70,7 @@ class InfraredController extends Controller
      */
     public function edit($id)
     {
+        //$infrared = Infrared::with('buttons','buttons.code', 'buttons.code.device')->find($id);
         $infrared = Infrared::with('buttons.code.device')->find($id);
         $ports = Port::where('type', 'INFRARED_OUTPUT')->pluck('name', 'id');
         $devices = Device::pluck('name','id');
@@ -106,11 +109,14 @@ class InfraredController extends Controller
             {
                 if (isset($rq_button['id']))
                 {
-                    $button = $infrared->ports->find((integer)$rq_button['id']);
-                    $button->name = $rq_button['name'];
+                    $button = $infrared->buttons->find((integer)$rq_button['id']);
+                    $button->code_id = $rq_button['code_id'];
+                    $button->x = $rq_button['x'];
+                    $button->y = $rq_button['y'];
                     $button->update();
                 }else{
-                    $infrared->ports()->create($rq_button);
+                    unset($rq_button['device_id']);
+                    $infrared->buttons()->create($rq_button);
                 }
             }
         $infrared->update();
@@ -126,5 +132,12 @@ class InfraredController extends Controller
     {
         Infrared::find($id)->delete();
         return redirect($this::ROUTE);
+    }
+
+    public function enviarCodigo($button_id)
+    {
+        $button = Button::with('infrared.port.node','code.device')->find($button_id);
+        $client = new \GuzzleHttp\Client();
+        $retorno = $client->request('GET', $button->infrared->port->node->ip.'/?setInfrared='.$button->code->device->type.'&bits='.$button->code->device->bits.'&code='.hexdec($button->code->code))->close();
     }
 }

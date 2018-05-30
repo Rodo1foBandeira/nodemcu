@@ -32,6 +32,7 @@ class ControleController extends Controller
 
     private function prepareGroups()
     {
+        //$nodes = Node::join('ports','ports.node_id', '=', 'nodes.id')->where('type', 'DIGITAL_OUTPUT')->with('ports')->get();
         $nodes = Node::with('ports')->get();
         $ports = [];
         foreach ($nodes as $key => $node)
@@ -40,9 +41,12 @@ class ControleController extends Controller
             foreach ($node->ports as $key => $port)
             {
                 // Todo: Type condition of pin
-                $port['status'] = $this->getStatePin($res_ports, $port->pin);
-                $port['ip'] = $node->ip;
-                array_push($ports, $port);
+                if($port->type != 'INFRARED_OUTPUT' && $port->type != 'INFRARED_INPUT')
+                {
+                    $port['status'] = $this->getStatePin($res_ports, $port->pin);
+                    $port['ip'] = $node->ip;
+                    array_push($ports, $port);
+                }
             }
         }
 
@@ -73,7 +77,7 @@ class ControleController extends Controller
 
     public function onOff($port_id)
     {
-        $port = Port::find($port_id)->with('node');
+        $port = Port::with('node')->find($port_id);
         $client = new \GuzzleHttp\Client();
         $client->request('GET', $port->node->ip.'/?digital='.$port->pin)->getBody()->close();
         $groups = $this->prepareGroups();
