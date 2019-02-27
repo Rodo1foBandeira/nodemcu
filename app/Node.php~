@@ -21,7 +21,7 @@ class Node extends Model
         parent::boot();
 
         static::deleting(function($node) { // before delete() method call this
-             $node->ports()->delete();
+             $node->photos()->delete();
              // do the rest of the cleanup...
         });
     }
