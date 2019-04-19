@@ -22,7 +22,7 @@
                 &nbsp;Nome:&nbsp;
                 {!! Form::text('ports['.$key.'][name]', $port->name, ['class'=>'form-control','placeholder'=>'Nome']) !!}
                 &nbsp;Tipo:&nbsp;
-                {!! Form::text('ports['.$key.'][type]', $port->type, ['class'=>'form-control','placeholder'=>'Tipo']) !!}
+                {!! Form::select('ports['.$key.'][type]', [null => 'Selecione'] + ['DIGITAL_OUTPUT' => 'DIGITAL_OUTPUT','DIGITAL_INPUT'=>'DIGITAL_INPUT','ANALOG_INPUT'=>'ANALOG_INPUT','ANALOG_OUTPUT'=>'ANALOG_OUTPUT', 'PWM_OUTPUT'=>'PWM_OUTPUT', 'INFRARED_OUTPUT'=>'INFRARED_OUTPUT', 'INFRARED_INPUT'=>'INFRARED_INPUT'], $port->type, ['class' => 'form-control']) !!}
                 <a class="btn btn-primary btn-xs" style="margin-left: 3px;" onclick="delRow(this)"><span class="glyphicon glyphicon-minus"></span></a>
             </div>
         @endforeach
@@ -49,7 +49,9 @@
                     '&nbsp;Nome:&nbsp;'+
             '<input placeholder="Nome" name="ports['+key+'][name]" type="text" class="form-control">'+
                     '&nbsp;Tipo:&nbsp;'+
-            '<input placeholder="Tipo" name="ports['+key+'][type]" type="text" class="form-control"><a onclick="delRow(this)" class="btn btn-primary btn-xs" style="margin-left: 3px;"><span class="glyphicon glyphicon-minus"></span></a>';
+            '<select name="ports['+key+'][type]" class="form-control"><option value="">Selecione</option><option value="DIGITAL_OUTPUT">DIGITAL_OUTPUT</option><option value="DIGITAL_INPUT">DIGITAL_INPUT</option><option value="ANALOG_INPUT">ANALOG_INPUT</option><option value="ANALOG_OUTPUT">ANALOG_OUTPUT</option><option value="PWM_OUTPUT">PWM_OUTPUT</option><option value="INFRARED_OUTPUT">INFRARED_OUTPUT</option><option value="INFRARED_INPUT">INFRARED_INPUT</option></select>'+
+            '<a onclick="delRow(this)" class="btn btn-primary btn-xs" style="margin-left: 3px;"><span class="glyphicon glyphicon-minus"></span></a>';
+
         var div = $('<div>',{
             class: "form-inline",
             style: "margin-bottom: 5px;",

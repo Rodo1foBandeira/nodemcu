@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\Node;
 use App\Port;
+use App\PortType;
 use Illuminate\Http\Request;
 
 class NodeController extends Controller
@@ -28,7 +29,7 @@ class NodeController extends Controller
     public function create()
     {
         $groups = Group::pluck('name', 'id');
-        return view($this::ROUTE.'.create', compact('groups'));
+        return view($this::ROUTE.'.create', compact('groups', 'portType'));
     }
     /**
      * Store a newly created resource in storage.
@@ -67,7 +68,7 @@ class NodeController extends Controller
     {
         $node = Node::with('ports')->find($id);
         $groups = Group::pluck('name', 'id');
-        return view($this::ROUTE.'.edit',compact('node', 'groups'));
+        return view($this::ROUTE.'.edit',compact('node', 'groups', 'portType'));
     }
     /**
      * Update the specified resource in storage.

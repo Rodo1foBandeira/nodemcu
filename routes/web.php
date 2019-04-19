@@ -22,6 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware'=>'auth'], function (){
     Route::get('controle', 'ControleController@index');
     Route::get('controle/onOff/{port_id}', 'ControleController@onOff');
+    Route::get('controle/ajustarPWM/{port_id}/{value}', 'ControleController@ajustarPWM');
     Route::resource('group', 'GroupController');
     Route::resource('node', 'NodeController');
     Route::resource('infrared', 'InfraredController');

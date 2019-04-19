@@ -43,7 +43,14 @@ class ControleController extends Controller
                 // Todo: Type condition of pin
                 if($port->type != 'INFRARED_OUTPUT' && $port->type != 'INFRARED_INPUT')
                 {
-                    $port['status'] = $this->getStatePin($res_ports, $port->pin);
+                    if ($port->type == 'PWM_OUTPUT' && $this->getStatePin($res_ports, $port->pin) == 1)
+                    {
+                        $port['status'] = 100;
+                    }
+                    else
+                    {
+                        $port['status'] = $this->getStatePin($res_ports, $port->pin) / 1024 * 100;
+                    }
                     $port['ip'] = $node->ip;
                     array_push($ports, $port);
                 }
@@ -80,6 +87,24 @@ class ControleController extends Controller
         $port = Port::with('node')->find($port_id);
         $client = new \GuzzleHttp\Client();
         $client->request('GET', $port->node->ip.'/?digital='.$port->pin)->getBody()->close();
+        $groups = $this->prepareGroups();
+        return view('controle._index', compact('groups'));
+    }
+
+    public function  ajustarPWM($port_id, $value)
+    {
+        $port = Port::with('node')->find($port_id);
+        $client = new \GuzzleHttp\Client();
+        if($value > 0 && $value < 100)
+        {
+            $pwm = 1024 / 100 * $value;
+            $client->request('GET', $port->node->ip.'/?analog='.$port->pin.'&ciclo='.$pwm)->getBody()->close();
+
+        }
+        else
+        {
+            $client->request('GET', $port->node->ip.'/?digital='.$port->pin.'&set='.$value)->getBody()->close();
+        }
         $groups = $this->prepareGroups();
         return view('controle._index', compact('groups'));
     }
