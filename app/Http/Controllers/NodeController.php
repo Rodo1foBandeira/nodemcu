@@ -29,7 +29,7 @@ class NodeController extends Controller
     public function create()
     {
         $groups = Group::pluck('name', 'id');
-        return view($this::ROUTE.'.create', compact('groups', 'portType'));
+        return view($this::ROUTE.'.create', compact('groups'));
     }
     /**
      * Store a newly created resource in storage.
@@ -68,7 +68,7 @@ class NodeController extends Controller
     {
         $node = Node::with('ports')->find($id);
         $groups = Group::pluck('name', 'id');
-        return view($this::ROUTE.'.edit',compact('node', 'groups', 'portType'));
+        return view($this::ROUTE.'.edit',compact('node', 'groups'));
     }
     /**
      * Update the specified resource in storage.
