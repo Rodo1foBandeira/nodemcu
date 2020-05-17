@@ -40,12 +40,13 @@ class NodeController extends Controller
     public function store(Request $request)
     {
         $node = Node::create($request->all());
+
         $ports = $request->input('ports');
-        foreach ($ports as $key => &$port)
-        {
-            $port['node_id'] = $node->id;
+        if (isset($ports)){
+            foreach ($ports as $key => &$port)
+                $port['node_id'] = $node->id;
+            Port::insert($ports);
         }
-        Port::insert($ports);
         return redirect($this::ROUTE);
     }
     /**

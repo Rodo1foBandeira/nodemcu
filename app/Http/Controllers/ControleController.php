@@ -33,22 +33,22 @@ class ControleController extends Controller
     private function getResponse($url)
     {
         try {
-        		$client = new Client();
-                $res = $client->request('GET', $url, ['connect_timeout' => 5]);
-                if ($res->getStatusCode() == 200) {
-                    return json_decode($res->getBody(), false);                    
-                } else {
-                    return null;
-                }
-            }catch (ConnectException $ex){
-                return null;
-            }catch (ClientException $ex){
-                return null;
-            }catch (BadResponseException $ex){
-                return null;
-            }catch (Exception $e){
+            $client = new Client();
+            $res = $client->request('GET', $url, ['connect_timeout' => 5]);
+            if ($res->getStatusCode() == 200) {
+                return json_decode($res->getBody(), false);
+            } else {
                 return null;
             }
+        }catch (ConnectException $ex){
+            return null;
+        }catch (ClientException $ex){
+            return null;
+        }catch (BadResponseException $ex){
+            return null;
+        }catch (Exception $e){
+            return null;
+        }
     }
 
     private function prepareGroups()

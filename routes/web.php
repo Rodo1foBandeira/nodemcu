@@ -30,4 +30,6 @@ Route::group(['middleware'=>'auth'], function (){
     Route::resource('device', 'DeviceController');
     Route::get('device/getCodes/{device_id}', 'DeviceController@getCodes');
     Route::get('device/lerCodigo/{port_id}', 'DeviceController@lerCodigo');
+    Route::resource('input', 'InputController');
+    Route::get('input/getValor/{id}', 'InputController@getValor');
 });

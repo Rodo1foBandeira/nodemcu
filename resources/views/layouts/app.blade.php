@@ -51,6 +51,7 @@
                             <li><a class="nav-link" href="{{ route('node.index') }}">Nodes</a></li>
                             <li><a class="nav-link" href="{{ route('device.index') }}">Controles</a></li>
                             <li><a class="nav-link" href="{{ route('infrared.index') }}">Infravermelho</a></li>
+                            <li><a class="nav-link" href="{{ route('input.index') }}">Entradas</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
